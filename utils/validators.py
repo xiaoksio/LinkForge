@@ -1,7 +1,13 @@
 from pathlib import Path
 from typing import Optional
-import magic
 from config import ALLOWED_FORMATS, MAX_FILE_SIZE
+
+# 尝试导入 magic 库,如果失败则使用降级方案
+try:
+    import magic
+    MAGIC_AVAILABLE = True
+except ImportError:
+    MAGIC_AVAILABLE = False
 
 
 def validate_file_extension(filename: str) -> bool:
@@ -54,6 +60,9 @@ def detect_mime_type(file_path: Path) -> Optional[str]:
     Returns:
         Optional[str]: MIME 类型
     """
+    if not MAGIC_AVAILABLE:
+        return None
+    
     try:
         mime = magic.Magic(mime=True)
         return mime.from_file(str(file_path))

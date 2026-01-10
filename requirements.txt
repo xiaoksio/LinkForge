@@ -4,4 +4,10 @@ python-multipart==0.0.6
 python-dotenv==1.0.0
 aiofiles==23.2.1
 httpx==0.26.0
-python-magic-bin==0.4.14
+
+# 可选依赖: MIME 类型检测 (提高文件格式识别准确性)
+# Windows: 使用 python-magic-bin (包含 libmagic)
+# Linux: 需要先安装系统依赖 libmagic1, 然后安装 python-magic
+# 如果不安装,系统仍可正常运行,但会依赖文件扩展名和 Content-Type 头来识别格式
+# python-magic==0.4.27  # Linux
+# python-magic-bin==0.4.14  # Windows
