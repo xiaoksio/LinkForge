@@ -21,47 +21,48 @@
 
 ## 📦 安装部署
 
-### 1. 克隆项目
+> **📘 详细部署指南**: 请查看 [DEPLOYMENT.md](DEPLOYMENT.md) 获取完整的部署说明,包括 Linux、Windows 和 Docker 部署方法。
+
+### 快速开始 (Linux)
 
 ```bash
-git clone <repository-url>
-cd LinkForge
-```
+# 1. 安装系统依赖
+sudo apt-get update
+sudo apt-get install -y libmagic1
 
-### 2. 安装依赖
+# 2. 创建虚拟环境
+python3 -m venv venv
+source venv/bin/activate
 
-```bash
-# 创建虚拟环境 (可选)
-python -m venv .venv
-.venv\Scripts\activate  # Windows
-# source .venv/bin/activate  # Linux/Mac
-
-# 安装依赖
+# 3. 安装依赖
 pip install -r requirements.txt
-```
+pip install python-magic==0.4.27  # Linux 版本
 
-### 3. 配置环境变量
-
-复制 `.env.example` 为 `.env` 并根据需要修改配置:
-
-```bash
+# 4. 配置环境变量
 cp .env.example .env
+# 编辑 .env 文件,修改 BASE_URL 等配置
+
+# 5. 启动服务
+uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
-主要配置项:
-- `BASE_URL` - 服务访问基础 URL (部署后的域名或 IP)
-- `UPLOAD_DIR` - 文件上传目录
-- `MAX_FILE_SIZE` - 最大文件大小限制 (字节)
-- `DOWNLOAD_TIMEOUT` - URL 下载超时时间 (秒)
-
-### 4. 启动服务
+### 快速开始 (Windows)
 
 ```bash
-# 开发模式
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+# 1. 创建虚拟环境
+python -m venv .venv
+.venv\Scripts\activate
 
-# 生产模式
-uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
+# 2. 安装依赖
+pip install -r requirements.txt
+pip install python-magic-bin==0.4.14  # Windows 版本
+
+# 3. 配置环境变量
+copy .env.example .env
+# 编辑 .env 文件
+
+# 4. 启动服务
+uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
 服务启动后访问:
@@ -166,6 +167,13 @@ curl -X POST "http://localhost:8000/api/upload/batch/urls" \
 | `DOWNLOAD_TIMEOUT` | URL 下载超时 (秒) | `30` |
 | `ALLOWED_IMAGE_FORMATS` | 允许的图片格式 | `jpg,jpeg,png,gif,webp,bmp,svg,ico` |
 | `ALLOWED_VIDEO_FORMATS` | 允许的视频格式 | `mp4,avi,mov,mkv,flv,wmv,webm,m4v,mpg,mpeg` |
+
+### 可选依赖
+
+**python-magic** (MIME 类型检测):
+- **Linux**: `pip install python-magic==0.4.27` (需要先安装 `libmagic1`)
+- **Windows**: `pip install python-magic-bin==0.4.14`
+- **说明**: 如果不安装,系统仍可正常运行,但会依赖文件扩展名和 Content-Type 头来识别格式
 
 ## 📁 项目结构
 
